@@ -1,6 +1,11 @@
 "use client";
 
-import { onAuthChange, singIn } from "@/firbaseService";
+import {
+  onAuthChange,
+  signInWithGithub,
+  signInWithGoogle,
+  singIn,
+} from "@/firbaseService";
 import { Inter } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,13 +15,16 @@ const inter = Inter({
   subsets: ["latin"],
 });
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
+
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
   const [isLoggedIn, seIsLoggedIn] = useState<boolean | null>(null);
   useEffect(() => {
     onAuthChange((user) => {
-      console.log("auth state chnged");
       if (user) {
         router.push("/");
       } else {
@@ -24,13 +32,14 @@ export default function Login() {
       }
     });
   }, []);
+  useEffect(() => {
+    if (isLoading) {
+      setErrorMessage("");
+    }
+  }, [isLoading]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-
-    const email = e.target["email"].value;
-    const password = e.target["password"].value;
-    const rememberMe = e.target["rememberMe"].checked;
 
     if (password.length < 8) {
       setErrorMessage("Password length should be greater than 8");
@@ -49,7 +58,25 @@ export default function Login() {
         setErrorMessage(err.message.split(":")[1]);
       });
   };
+  const handleGoogleBtn = () => {
+    setIsLoading(true);
 
+    signInWithGoogle()
+      .then((data) => setIsLoading(true))
+      .catch((err) => {
+        setIsLoading(false);
+        setErrorMessage(err.message.split(":")[1]);
+      });
+  };
+  const handleGithubBtn = () => {
+    setIsLoading(true);
+    signInWithGithub()
+      .then((data) => setIsLoading(true))
+      .catch((err) => {
+        setIsLoading(false);
+        setErrorMessage(err.message.split(":")[1]);
+      });
+  };
   return (
     <>
       {isLoggedIn === null && <p>Loading ...</p>}
@@ -69,7 +96,10 @@ export default function Login() {
               Challenge and battle other coders and show of your skills!
             </p>
             <div className="flex gap-3 justify-center mt-5">
-              <button className="border-2 border-orange-300 p-2 rounded-md justify-center flex gap-1 hover:scale-105 transition-transform">
+              <button
+                onClick={handleGoogleBtn}
+                className="border-2 border-orange-300 p-2 rounded-md justify-center flex gap-1 hover:scale-105 transition-transform"
+              >
                 <img
                   src="https://cdn.simpleicons.org/Google/white"
                   width={20}
@@ -77,9 +107,12 @@ export default function Login() {
                 />
                 Login With Google
               </button>
-              <button className="border-2 border-sky-400 flex justify-center gap-1 p-2 rounded-md hover:scale-105 transition-transform">
+              <button
+                onClick={handleGithubBtn}
+                className="border-2 border-sky-400 flex justify-center gap-1 p-2 rounded-md hover:scale-105 transition-transform"
+              >
                 <img
-                  src="https://cdn.simpleicons.org/leetcode/white"
+                  src="https://cdn.simpleicons.org/github/white"
                   width={20}
                   alt=""
                 />
@@ -93,6 +126,8 @@ export default function Login() {
             </div>
             <label htmlFor="email">Email</label>
             <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               type="text"
               id="email"
               name="email"
@@ -107,6 +142,8 @@ export default function Login() {
             </div>
 
             <input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               type="password"
               className="h-11 focus:outline-none text-lg font-normal text-gray-200  rounded-md mt-1 bg-[#252134] pl-2"
               name="password"
@@ -117,7 +154,8 @@ export default function Login() {
                 type="checkbox"
                 className="accent-[#838383]   bg-gray-300  "
                 name="rememberMe"
-                defaultChecked
+                defaultChecked={rememberMe}
+                onClick={() => setRememberMe((prev) => !prev)}
                 id="rememberMe"
               />
               <label htmlFor="rememberMe">Remember me</label>
@@ -131,7 +169,7 @@ export default function Login() {
             <p className="mt-4">
               Don&apos;t have an accoun?{" "}
               <a
-                href="/register"
+                href="/signup"
                 className="font-medium hover:underline underline-offset-4"
               >
                 Sign Up

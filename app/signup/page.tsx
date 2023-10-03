@@ -2,20 +2,24 @@
 
 import { Inter } from "next/font/google";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
-import { onAuthChange, singUp } from "@/firbaseService";
+import { useEffect, useState } from "react";
+import {
+  onAuthChange,
+  signInWithGithub,
+  signInWithGoogle,
+  singUp,
+} from "@/firbaseService";
 const inter = Inter({
   weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
 });
-type Inputs = {
-  email: string;
-  password: string;
-  verifyPassword: string;
-  remeberMe: boolean;
-};
 
 export default function SignUp() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [verifyPassword, setVerifyPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
+
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
@@ -29,14 +33,13 @@ export default function SignUp() {
       }
     });
   }, []);
-
+  useEffect(() => {
+    if (isLoading) {
+      setErrorMessage("");
+    }
+  }, [isLoading]);
   const handleSubmit = (e: any) => {
     e.preventDefault();
-
-    const email = e.target["email"].value;
-    const password = e.target["password"].value;
-    const verifyPassword = e.target["verifyPassword"].value;
-    const rememberMe = e.target["rememberMe"].checked;
     if (password != verifyPassword) {
       setErrorMessage("Password and password verification should be the same");
       return;
@@ -59,6 +62,25 @@ export default function SignUp() {
       });
   };
 
+  const handleGoogleBtn = () => {
+    setIsLoading(true);
+
+    signInWithGoogle()
+      .then((data) => setIsLoading(true))
+      .catch((err) => {
+        setIsLoading(false);
+        setErrorMessage(err.message.split(":")[1]);
+      });
+  };
+  const handleGithubBtn = () => {
+    setIsLoading(true);
+    signInWithGithub()
+      .then((data) => setIsLoading(true))
+      .catch((err) => {
+        setIsLoading(false);
+        setErrorMessage(err.message.split(":")[1]);
+      });
+  };
   return (
     <>
       {isLoggedIn === null && <h1>loading ...</h1>}
@@ -78,7 +100,10 @@ export default function SignUp() {
               Challenge and battle other coders and show of your skills!
             </p>
             <div className="flex gap-3 justify-center mt-5">
-              <button className="border-2 border-orange-300 p-2 rounded-md justify-center flex gap-1 hover:scale-105 transition-transform">
+              <button
+                onClick={handleGoogleBtn}
+                className="border-2 border-orange-300 p-2 rounded-md justify-center flex gap-1 hover:scale-105 transition-transform"
+              >
                 <img
                   src="https://cdn.simpleicons.org/Google/white"
                   width={20}
@@ -86,13 +111,16 @@ export default function SignUp() {
                 />
                 Sigh up With Google
               </button>
-              <button className="border-2 border-sky-400 flex justify-center gap-1 p-2 rounded-md hover:scale-105 transition-transform">
+              <button
+                className="border-2 border-sky-400 flex justify-center gap-1 p-2 rounded-md hover:scale-105 transition-transform"
+                onClick={handleGithubBtn}
+              >
                 <img
-                  src="https://cdn.simpleicons.org/leetcode/white"
+                  src="https://cdn.simpleicons.org/github/white"
                   width={20}
                   alt=""
                 />
-                Sign up With Leetcode
+                Sign up With Github
               </button>
             </div>
             <div className="text-gray-400 mx-auto mt-4 flex gap-1 font-medium tracking-wider ">
@@ -102,12 +130,13 @@ export default function SignUp() {
             </div>
             <label htmlFor="email">Email</label>
             <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               type="email"
               id="email"
               required
               name="email"
-              placeholder="Your email"
-              className="h-11  focus:outline-none text-lg font-normal placeholder:text-base placeholder: text-gray-200 mt-1 rounded-md  bg-[#252134] pl-2"
+              className="h-11  focus:outline-none text-lg font-normal  mt-1 rounded-md  bg-[#252134] pl-2"
             />
 
             <label htmlFor="password" className="mt-3">
@@ -115,9 +144,10 @@ export default function SignUp() {
             </label>
 
             <input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               type="password"
-              placeholder="Your password"
-              className="h-11 focus:outline-none text-lg font-normal placeholder:text-base placeholder: text-gray-200  rounded-md mt-1 bg-[#252134] pl-2"
+              className="h-11 focus:outline-none text-lg font-normal  rounded-md mt-1 bg-[#252134] pl-2"
               name="password"
               id="password"
             />
@@ -126,10 +156,11 @@ export default function SignUp() {
             </label>
 
             <input
+              value={verifyPassword}
+              onChange={(e) => setVerifyPassword(e.target.value)}
               type="password"
-              className="h-11 focus:outline-none placeholder:text-base placeholder: text-lg font-normal text-gray-200  rounded-md mt-1 bg-[#252134] pl-2"
+              className="h-11 focus:outline-none  font-normal text-gray-200  rounded-md mt-1 bg-[#252134] pl-2"
               name="verifyPassword"
-              placeholder="Your password"
               id="verifyPassword"
             />
             <div className="flex gap-2 mt-2">
@@ -137,7 +168,8 @@ export default function SignUp() {
                 type="checkbox"
                 className="accent-[#838383]   bg-gray-300  "
                 name="rememberMe"
-                defaultChecked
+                defaultChecked={rememberMe}
+                onClick={() => setRememberMe((prev) => !prev)}
                 id="rememberMe"
               />
               <label htmlFor="rememberMe">Remember me</label>
