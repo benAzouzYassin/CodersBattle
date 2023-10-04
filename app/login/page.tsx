@@ -2,10 +2,12 @@
 
 import {
   onAuthChange,
+  saveNewUser,
   signInWithGithub,
   signInWithGoogle,
   singIn,
 } from "@/firbaseService";
+import { User } from "firebase/auth";
 import { Inter } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -26,7 +28,8 @@ export default function Login() {
   useEffect(() => {
     onAuthChange((user) => {
       if (user) {
-        router.push("/");
+        saveNewUser(user);
+        router.replace("/");
       } else {
         seIsLoggedIn(false);
       }
@@ -58,7 +61,8 @@ export default function Login() {
         setErrorMessage(err.message.split(":")[1]);
       });
   };
-  const handleGoogleBtn = () => {
+  const handleGoogleBtn = (e: any) => {
+    e.preventDefault();
     setIsLoading(true);
 
     signInWithGoogle()
@@ -68,7 +72,9 @@ export default function Login() {
         setErrorMessage(err.message.split(":")[1]);
       });
   };
-  const handleGithubBtn = () => {
+  const handleGithubBtn = (e: any) => {
+    e.preventDefault();
+
     setIsLoading(true);
     signInWithGithub()
       .then((data) => setIsLoading(true))

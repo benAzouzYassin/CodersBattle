@@ -5,10 +5,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   onAuthChange,
+  saveNewUser,
   signInWithGithub,
   signInWithGoogle,
   singUp,
 } from "@/firbaseService";
+import { User } from "firebase/auth";
+import { Timestamp } from "firebase/firestore";
 const inter = Inter({
   weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
@@ -24,10 +27,12 @@ export default function SignUp() {
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
   const [isLoggedIn, seIsLoggedIn] = useState<boolean | null>(null);
+
   useEffect(() => {
     onAuthChange((user) => {
       if (user) {
-        router.push("/");
+        saveNewUser(user);
+        router.replace("/");
       } else {
         seIsLoggedIn(false);
       }
@@ -38,6 +43,7 @@ export default function SignUp() {
       setErrorMessage("");
     }
   }, [isLoading]);
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if (password != verifyPassword) {
@@ -53,9 +59,12 @@ export default function SignUp() {
       setErrorMessage("Email length should be greater than 4");
       return;
     }
+
     setIsLoading(true);
     singUp(email, password)
-      .then((user) => seIsLoggedIn(false))
+      .then((user) => {
+        seIsLoggedIn(false);
+      })
       .catch((err) => {
         setIsLoading(false);
         setErrorMessage(err.message.split(":")[1]);
@@ -64,7 +73,6 @@ export default function SignUp() {
 
   const handleGoogleBtn = () => {
     setIsLoading(true);
-
     signInWithGoogle()
       .then((data) => setIsLoading(true))
       .catch((err) => {
@@ -72,10 +80,14 @@ export default function SignUp() {
         setErrorMessage(err.message.split(":")[1]);
       });
   };
+
   const handleGithubBtn = () => {
     setIsLoading(true);
     signInWithGithub()
-      .then((data) => setIsLoading(true))
+      .then((data) => {
+        console.log(data);
+        setIsLoading(true);
+      })
       .catch((err) => {
         setIsLoading(false);
         setErrorMessage(err.message.split(":")[1]);
@@ -183,7 +195,7 @@ export default function SignUp() {
             <p className="mt-4">
               Don&apos;t have an accoun?{" "}
               <a
-                href="/register"
+                href="/login"
                 className="font-medium hover:underline underline-offset-4"
               >
                 Login

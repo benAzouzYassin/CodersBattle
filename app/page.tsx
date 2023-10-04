@@ -4,6 +4,7 @@ import { onAuthChange, signOut } from "@/firbaseService";
 import { User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Home() {
   const router = useRouter();
@@ -14,8 +15,7 @@ export default function Home() {
 
   useEffect(() => {
     if (currentUser === null) {
-      console.log("no logged in user");
-      router.push("/login");
+      router.replace("/login");
     }
   }, [currentUser]);
 
@@ -24,7 +24,8 @@ export default function Home() {
       {!currentUser && <h1>Loading .....</h1>}
       {currentUser && (
         <p>
-          welcome {currentUser.displayName}{" "}
+          welcome {currentUser.email}{" "}
+          <Link href={`/settings/${currentUser.uid}`}>settings page</Link>
           <button className="border-2 border-black" onClick={signOut}>
             SignOut?
           </button>

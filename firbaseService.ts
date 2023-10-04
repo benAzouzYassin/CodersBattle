@@ -9,6 +9,26 @@ import {
   GithubAuthProvider,
   GoogleAuthProvider,
 } from "firebase/auth";
+import {
+  Timestamp,
+  collection,
+  doc,
+  getFirestore,
+  setDoc,
+} from "firebase/firestore";
+
+export type AppUser = {
+  email: string;
+  name: string;
+  userImg: string;
+  solvedProblems: string[];
+  ownedChallenges: string[];
+  leetCodeId: string;
+  isVerified: boolean;
+  finishedChallenges: string[];
+  currentChallenges: string[];
+  createdAt: Timestamp;
+};
 
 export const config = {
   apiKey: "AIzaSyDYY1oKwwOyw4cRosioo72QzkypxXhTGD4",
@@ -25,6 +45,8 @@ export const config = {
 };
 
 const app = initializeApp(config);
+
+/***********************AUTH************************/
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
@@ -54,4 +76,27 @@ export function signOut() {
 
 export async function signInWithGithub() {
   signInWithPopup(auth, githubProvider);
+}
+
+// export async  function loginWithGoogle() {
+//     return linkWithPopup(auth,googleProvider)
+// }
+/******************************FIRESTORE*******************************/
+export const db = getFirestore(app);
+
+export function saveNewUser(user: User) {
+  const userToSave: AppUser = {
+    email: user.email ?? "",
+    currentChallenges: [],
+    finishedChallenges: [],
+    isVerified: false,
+    leetCodeId: "",
+    ownedChallenges: [],
+    solvedProblems: [],
+    name: user.displayName ?? user?.email?.split("@")[0] ?? "",
+    userImg: user.photoURL ?? "",
+    createdAt: Timestamp.fromDate(new Date()),
+  };
+  const docRef = doc(db, "users", user.uid);
+  setDoc(docRef, userToSave);
 }
