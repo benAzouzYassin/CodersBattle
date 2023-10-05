@@ -16,7 +16,8 @@ export default function Home() {
       if (user) {
         getUserData(user.uid)
           .then((data) => {
-            toast.error("Please verify your leecode id.");
+            if (!data?.isVerified)
+              toast.error("Please verify your leecode ID ");
           })
           .catch((err) => console.error(err));
       }

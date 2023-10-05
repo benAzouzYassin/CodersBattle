@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  isNewUser,
   onAuthChange,
   saveNewUser,
   signInWithGithub,
@@ -28,8 +29,12 @@ export default function Login() {
   useEffect(() => {
     onAuthChange((user) => {
       if (user) {
-        saveNewUser(user);
-        router.replace("/");
+        isNewUser(user.uid)
+          .then(() => {
+            console.log("new user");
+            saveNewUser(user);
+          })
+          .finally(() => router.replace("/"));
       } else {
         seIsLoggedIn(false);
       }

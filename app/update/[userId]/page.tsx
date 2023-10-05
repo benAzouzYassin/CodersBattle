@@ -1,12 +1,10 @@
 "use client";
 
 // @ts-ignore
-import { experimental_useFormState as useFormState } from "react-dom";
-import { AppUser, getUserData } from "@/firbaseService";
-import { updateAction } from "./actions";
+import { AppUser, getCurrentUser, getUserData } from "@/firbaseService";
 import { useEffect, useState } from "react";
 import SubmitButton from "./SubmitButton";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type Props = {
   params: { userId: string };
@@ -15,27 +13,56 @@ type Props = {
 export default function UpdateUser({ params }: Props) {
   const [errorMessage, setErrorMessage] = useState("");
   const [currentUser, setCurrentUser] = useState<AppUser>();
-  const [submitState, formAction] = useFormState(updateAction, {
-    message: "",
-    success: false,
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [formUserName, setFormUserName] = useState("");
+  const [formLeetcodeId, setFormLeetcodeId] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    setFormUserName(currentUser?.name ?? "");
+    setFormLeetcodeId(currentUser?.leetCodeId ?? "");
+  }, [currentUser]);
 
   useEffect(() => {
     getUserData(params.userId).then((user) => setCurrentUser(user));
   }, []);
-  useEffect(() => {
-    if (submitState.success) {
-      redirect("/");
-    } else {
-      setErrorMessage(submitState.message);
-    }
-  }, [submitState]);
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    const userDataForApi = {
+      userName: formUserName,
+      leetcodeId: formLeetcodeId,
+      userId: getCurrentUser()?.uid,
+    };
+    setIsLoading(true);
+    fetch("/api/updateUser", {
+      method: "POST",
+      body: JSON.stringify(userDataForApi),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setIsLoading(false);
+
+        if (!data.success) {
+          setErrorMessage(data.message);
+        } else {
+          setErrorMessage("");
+          router.replace("/");
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.log(err.message);
+        setErrorMessage("server error");
+        console.error(err);
+      });
+  };
 
   return (
     <main className="flex w-[100vw] h-[100vh]  bg-gradient-to-bl   from-[#192735] to-black  ">
       <form
+        onSubmit={handleSubmit}
         className=" bg-white  m-auto py-10  w-[30%]  pr-20  flex flex-col h-[70%]  rounded-2xl shadow-lg  px-20 "
-        action={formAction}
       >
         <h1 className=" mt-5 text-center w-[95%] font-bold  text-2xl">
           Update your informations
@@ -48,25 +75,23 @@ export default function UpdateUser({ params }: Props) {
             defaultValue={currentUser?.email}
             type="text"
             name="Email"
-            placeholder={
-              currentUser?.email === "" ? "Your Email !" : currentUser?.email
-            }
-            className="h-12 rounded-md placeholder:font-light pl-2 shadow-sm border-2 border-b-4  border-black focus-within:border-b-[5px] focus-within:border-r-[3px] focus-within:translate-x-[-3px] focus-within:translate-y-[-1px]   transition-transform w-[95%]"
+            disabled
+            className="h-12 rounded-md placeholder:font-light bg-gray-200 pl-2 shadow-sm border-2 border-b-4  border-black focus-within:outline-none focus-within:border-b-[5px] focus-within:border-r-[3px] focus-within:translate-x-[-3px] focus-within:translate-y-[-1px]   transition-transform w-[95%]"
           />{" "}
-          <span className="text-2xl text-red-600 font-semibold">*</span>
         </div>
         <label htmlFor="userName" className="mt-5 font-semibold mb-1 ">
           User Name :
         </label>
         <div className="flex gap-2">
           <input
-            defaultValue={currentUser?.name}
+            onChange={(e) => setFormUserName(e.target.value)}
+            value={formUserName}
             type="text"
             name="UserName"
             placeholder={
               currentUser?.name === "" ? "Your Name !" : currentUser?.name
             }
-            className="h-12 rounded-md placeholder:font-light pl-2 shadow-sm border-2 border-b-4  border-black focus-within:border-b-[5px] focus-within:border-r-[3px] focus-within:translate-x-[-3px] focus-within:translate-y-[-1px]   transition-transform w-[95%]"
+            className="h-12 rounded-md placeholder:font-light pl-2 shadow-sm border-2 border-b-4 focus-within:outline-none border-black focus-within:border-b-[5px] focus-within:border-r-[3px] focus-within:translate-x-[-3px] focus-within:translate-y-[-1px]   transition-transform w-[95%]"
           />
           <span className="text-2xl text-red-600 font-semibold">*</span>
         </div>
@@ -75,7 +100,6 @@ export default function UpdateUser({ params }: Props) {
         </label>
         <div className="flex gap-2">
           <input
-            defaultValue={currentUser?.leetCodeId}
             placeholder={
               currentUser?.isVerified === false
                 ? "Leetcode Name !"
@@ -83,7 +107,9 @@ export default function UpdateUser({ params }: Props) {
             }
             type="text"
             name="LeetcodeId"
-            className="h-12 w-[95%] rounded-md placeholder:font-light pl-2 shadow-sm border-2 border-b-4  border-black focus-within:border-b-[5px] focus-within:border-r-[3px] focus-within:translate-x-[-3px] focus-within:translate-y-[-1px]   transition-transform"
+            value={formLeetcodeId}
+            onChange={(e) => setFormLeetcodeId(e.target.value)}
+            className="h-12 w-[95%] rounded-md placeholder:font-light pl-2 shadow-sm border-2 border-b-4  border-black focus-within:outline-none focus-within:border-b-[5px] focus-within:border-r-[3px] focus-within:translate-x-[-3px] focus-within:translate-y-[-1px]   transition-transform"
           />
           <span className="text-2xl text-red-600 font-semibold">*</span>
         </div>
@@ -96,7 +122,7 @@ export default function UpdateUser({ params }: Props) {
           <span className=" text-red-600 font-semibold">*</span> means a
           required field
         </p>
-        <SubmitButton />
+        <SubmitButton loading={isLoading} />
       </form>
     </main>
   );

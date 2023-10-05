@@ -69,7 +69,6 @@ export async function singIn(email: string, password: string) {
   return signInWithEmailAndPassword(auth, email, password);
 }
 export function getCurrentUser() {
-  console.log(auth.currentUser);
   return auth.currentUser;
 }
 export function onAuthChange(cb: (user: User | null) => void) {
@@ -109,4 +108,12 @@ export async function getUserData(userId: string) {
   const snapshot = await getDoc(target);
   const currentUser = snapshot.data() as AppUser;
   return currentUser;
+}
+export async function isNewUser(id: string) {
+  const user = await getUserData(id)
+  if (!user) {
+    return true
+  } else {
+    throw new Error("Old user ! ")
+  }
 }

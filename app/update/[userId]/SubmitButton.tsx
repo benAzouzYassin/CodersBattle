@@ -1,19 +1,16 @@
 "use client";
-import { experimental_useFormStatus as useFormStatus } from "react-dom";
 
-export default function SubmitButton() {
-  const { pending } = useFormStatus();
-
+export default function SubmitButton({ loading }: { loading: boolean }) {
   return (
     <>
-      {!pending ? (
+      {!loading ? (
         <button className="bg-black text-xl font-bold text-white w-[95%] rounded-2xl mt-3 h-12 hover:bg-[#313030] hover:scale-[98%] transition-transform">
           Save Updates
         </button>
       ) : (
         <button
           disabled
-          className="flex items-center w-[95%] h-12 rounded-2xl bg-black text-white"
+          className="flex items-center w-[95%] mt-3 h-12 rounded-2xl bg-black text-white"
         >
           <svg
             className="h-10 w-[95%] rounded-2xl animate-spin text-white"
