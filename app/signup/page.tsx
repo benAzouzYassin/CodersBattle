@@ -189,7 +189,10 @@ export default function SignUp() {
             {errorMessage && (
               <p className="font-normal text-red-400">{errorMessage}</p>
             )}
-            <button className="border-2 mt-5 hover:scale-105 transition-transform hover:bg-[#231d33] font-medium  border-white h-11 text-xl rounded-md">
+            <button
+              onClick={handleSubmit}
+              className="border-2 mt-5 hover:scale-105 transition-transform hover:bg-[#231d33] font-medium  border-white h-11 text-xl rounded-md"
+            >
               {isLoading ? "Loading ..." : "Sign Up"}
             </button>
             <p className="mt-4">

@@ -13,11 +13,13 @@ import {
   Timestamp,
   collection,
   doc,
+  getDoc,
   getFirestore,
   setDoc,
 } from "firebase/firestore";
 
 export type AppUser = {
+  finishedChallengesCount: number;
   email: string;
   name: string;
   userImg: string;
@@ -52,6 +54,8 @@ const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 
 export async function singUp(email: string, password: string) {
+  email = email.toLowerCase();
+  password = password.toLowerCase();
   return createUserWithEmailAndPassword(auth, email, password);
 }
 
@@ -60,6 +64,8 @@ export async function signInWithGoogle() {
 }
 
 export async function singIn(email: string, password: string) {
+  email = email.toLowerCase();
+  password = password.toLowerCase();
   return signInWithEmailAndPassword(auth, email, password);
 }
 export function getCurrentUser() {
@@ -78,14 +84,12 @@ export async function signInWithGithub() {
   signInWithPopup(auth, githubProvider);
 }
 
-// export async  function loginWithGoogle() {
-//     return linkWithPopup(auth,googleProvider)
-// }
 /******************************FIRESTORE*******************************/
 export const db = getFirestore(app);
 
 export function saveNewUser(user: User) {
   const userToSave: AppUser = {
+    finishedChallengesCount: 0,
     email: user.email ?? "",
     currentChallenges: [],
     finishedChallenges: [],
@@ -99,4 +103,10 @@ export function saveNewUser(user: User) {
   };
   const docRef = doc(db, "users", user.uid);
   setDoc(docRef, userToSave);
+}
+export async function getUserData(userId: string) {
+  const target = doc(db, "users", userId);
+  const snapshot = await getDoc(target);
+  const currentUser = snapshot.data() as AppUser;
+  return currentUser;
 }
