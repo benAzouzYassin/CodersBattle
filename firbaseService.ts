@@ -114,6 +114,6 @@ export async function isNewUser(id: string) {
   if (!user) {
     return true
   } else {
-    throw new Error("Old user ! ")
+    return false
   }
 }

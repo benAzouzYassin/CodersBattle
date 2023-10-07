@@ -59,15 +59,15 @@ export default function UpdateUser({ params }: Props) {
   };
 
   return (
-    <main className="flex w-[100vw] h-[100vh]  bg-gradient-to-bl   from-[#192735] to-black  ">
+    <main className="flex w-[100vw] h-[100vh] bg-gradient-to-bl from-[#475c71] to-black  ">
       <form
         onSubmit={handleSubmit}
-        className=" bg-white  m-auto py-10  w-[30%]  pr-20  flex flex-col h-[70%]  rounded-2xl shadow-lg  px-20 "
+        className=" relative bg-white  m-auto py-10  w-[30%]  pr-20  flex flex-col h-[70%]  rounded-2xl shadow-lg  px-20 "
       >
-        <h1 className=" mt-5 text-center w-[95%] font-bold  text-2xl">
+        <h1 className=" mt-10 text-center absolute top-0 left-[3%] w-[95%] font-bold  text-2xl">
           Update your informations
         </h1>
-        <label htmlFor="Email" className="mt-6 font-semibold mb-1">
+        <label htmlFor="Email" className="mt-16 font-semibold mb-1">
           Email :
         </label>
         <div className="flex gap-2">

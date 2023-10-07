@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 export default function Home() {
+
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null | undefined>();
@@ -54,6 +55,13 @@ export default function Home() {
             className="border-2 p-4 mx-4 text-xl  bg-green-200"
           >
             update page
+          </Link>
+          <Link
+            onClick={() => setIsLoading(true)}
+            href={`/addChallenge`}
+            className="border-2 p-4 mx-4 text-xl  bg-green-200"
+          >
+            add challenge
           </Link>
           <button className="border-2 border-black" onClick={signOut}>
             SignOut?

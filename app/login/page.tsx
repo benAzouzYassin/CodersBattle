@@ -8,7 +8,6 @@ import {
   signInWithGoogle,
   singIn,
 } from "@/firbaseService";
-import { User } from "firebase/auth";
 import { Inter } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -30,10 +29,13 @@ export default function Login() {
     onAuthChange((user) => {
       if (user) {
         isNewUser(user.uid)
-          .then(() => {
-            console.log("new user");
-            saveNewUser(user);
+          .then((d) => {
+            if (d) {
+              saveNewUser(user);
+            }
           })
+          .catch(err => console.log(err.message))
+
           .finally(() => router.replace("/"));
       } else {
         seIsLoggedIn(false);
