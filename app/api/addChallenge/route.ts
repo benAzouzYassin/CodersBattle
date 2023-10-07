@@ -4,8 +4,8 @@ import { addDoc, collection, getDocs, query, where } from "firebase/firestore"
 
 export async function POST(req: Request) {
     const [name, link, description, difficulty, userId] = await req.json()
-    if (!name || !link || !description || !difficulty || !userId) {
-        return Response.json({ "message": "bad request", success: false }, { status: 400 })
+    if (!name || !link || !difficulty || !userId) {
+        return Response.json({ "message": "One of the fields is empty !", success: false }, { status: 400 })
     }
 
     const probVerification = await verifyProblem(link)
@@ -31,6 +31,7 @@ export async function POST(req: Request) {
                 "twoStarCount": 0,
                 "oneStarCount": 0,
             },
+            description: description,
             solvedCount: 0
 
         });

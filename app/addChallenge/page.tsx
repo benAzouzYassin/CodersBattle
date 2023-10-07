@@ -2,29 +2,67 @@
 
 
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Select from "./Select";
 import { getCurrentUser } from "@/firbaseService"
+import { useRouter } from "next/navigation";
 export default function AddChallenge() {
+
+
+  const router = useRouter()
+
   const [challengeName, setChallengeName] = useState("");
   const [challengeLink, setChallengeLink] = useState("");
   const [challengeDescription, setChallengeDescription] = useState("");
   const [selectedDiff, setSelectedDiff] = useState("Easy")
+  const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
+
+
+  const challengeNameRef = useRef<HTMLInputElement>(null)
+  const challengeLinkRef = useRef<HTMLInputElement>(null)
+
 
   const onDifficultySelect = (difficulty: string) => {
     setSelectedDiff(difficulty)
   }
   const handleSubmit = (e: any) => {
     e.preventDefault()
+    if (challengeName === "") {
+      challengeNameRef.current?.classList.add("shake-animation")
 
-    // make sure challenge does not exist ! 
+      setErrorMessage("Challenge name is required !")
+      return
+    }
+
+    if (challengeLink === "") {
+      challengeLinkRef.current?.classList.add("shake-animation")
+      setErrorMessage("Challenge link is required !")
+      return
+    }
+
+
+
     const userId = getCurrentUser()?.uid
     const challengeData = [challengeName, challengeLink, challengeDescription, selectedDiff, userId]
+    setIsLoading(true)
     fetch("/api/addChallenge", { method: "POST", body: JSON.stringify(challengeData) })
       .then(res => res.json())
-      // instead of console logging u revalidate(/)
-      .then(data => console.log(data))
-      .catch(err => console.error(err))
+      .then(data => {
+        setIsLoading(false)
+
+
+        if (!data.success) {
+          setErrorMessage(data.message ?? "")
+        } else {
+          router.replace("/")
+        }
+
+      })
+      .catch(err => {
+        setIsLoading(false)
+        console.error(err)
+      })
   }
 
   const inputClassName =
@@ -42,6 +80,7 @@ export default function AddChallenge() {
           Challenge name
         </label>
         <input
+          ref={challengeNameRef}
           className={inputClassName}
           type="text"
           value={challengeName}
@@ -52,7 +91,7 @@ export default function AddChallenge() {
         <label htmlFor="challengeLink" className="font-medium mt-1">
           challenge link
         </label>
-        <input className={inputClassName} value={challengeLink} onChange={(e) => setChallengeLink(e.target.value)} type="text" name="challengeLink" />
+        <input ref={challengeLinkRef} className={inputClassName} value={challengeLink} onChange={(e) => setChallengeLink(e.target.value)} type="text" name="challengeLink" />
         <label htmlFor="challengeDescription" className="font-medium mt-1">
           {" "}
           challenge description
@@ -68,6 +107,8 @@ export default function AddChallenge() {
         <button onClick={handleSubmit} className="border-4 flex justify-center items-center hover:bg-black hover:text-white transition-colors duration-150 ease-in border-black h-12 w-[95%] rounded-lg mt-7 text-xl font-black">
           ADD CHALLENGE
         </button>
+        {errorMessage && <p className="border-0 border-red-700 drop-shadow-md mt-2 pl-2  text-red-600">{errorMessage}</p>}
+        {isLoading && <p>loading....</p>}
       </form>
     </main>
   );
