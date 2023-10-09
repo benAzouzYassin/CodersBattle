@@ -1,16 +1,38 @@
 "use client";
 
-import { getUserData, onAuthChange, signOut } from "@/firbaseService";
+import { db, getUserData, onAuthChange } from "@/firbaseService";
 import { Toaster, toast } from "sonner";
 import { User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import Nav from "@/components/Nav";
+import { collection, getDocs, } from "firebase/firestore";
+import { TChallenge } from "@/challengeType";
+import Challenges from "@/components/Challenges";
+import Ranking from "@/components/Ranking";
+import FilterChallenges from "@/components/Filter";
+
 export default function Home() {
 
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null | undefined>();
+  const [challenges, setChallenges] = useState<TChallenge[]>([])
+  //TODO implement loading and errors for challenges
+  const getChallenges = async () => {
+    const challengesRef = collection(db, "challenges")
+    try {
+
+      const challengesData = (await getDocs(challengesRef)).docs.map(d => d.data()) as TChallenge[]
+      setChallenges(challengesData)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  console.log("reload")
+
+
   useEffect(() => {
     onAuthChange((user) => {
       setCurrentUser(user);
@@ -23,15 +45,20 @@ export default function Home() {
           .catch((err) => console.error(err));
       }
     });
+    getChallenges()
+
   }, []);
+
 
   useEffect(() => {
     if (currentUser === null) {
       router.replace("/login");
     }
   }, [currentUser]);
+
+
   return (
-    <>
+    <main className=" bg-[#282828]">
       <Toaster
         richColors
         toastOptions={{
@@ -41,33 +68,16 @@ export default function Home() {
       {isLoading && <h1 className="text-4xl">Loading</h1>}
       {currentUser === undefined && <h1>Loading .....</h1>}
       {currentUser && (
-        <p>
-          welcome {currentUser.email}{" "}
-          <Link
-            href={`/user/${currentUser.uid}`}
-            className="border-2 p-4 mx-4 text-xl  bg-green-200"
-          >
-            settings page
-          </Link>
-          <Link
-            onClick={() => setIsLoading(true)}
-            href={`/update/${currentUser.uid}`}
-            className="border-2 p-4 mx-4 text-xl  bg-green-200"
-          >
-            update page
-          </Link>
-          <Link
-            onClick={() => setIsLoading(true)}
-            href={`/addChallenge`}
-            className="border-2 p-4 mx-4 text-xl  bg-green-200"
-          >
-            add challenge
-          </Link>
-          <button className="border-2 border-black" onClick={signOut}>
-            SignOut?
-          </button>
-        </p>
+        <Nav currentUser={currentUser} setIsLoading={setIsLoading} />
       )}
-    </>
+      <div className="w-full gap-10 flex flex-row min-h-[100vh]">
+        <Ranking />
+        <div className="w-full pl-20 pr-60">
+          <FilterChallenges />
+          <Challenges challenges={challenges} />
+        </div>
+
+      </div>
+    </main>
   );
 }

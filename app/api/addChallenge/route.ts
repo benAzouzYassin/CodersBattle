@@ -1,6 +1,6 @@
 
 import { db } from "@/firbaseService"
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore"
+import { Timestamp, addDoc, collection, getDocs, query, where } from "firebase/firestore"
 
 export async function POST(req: Request) {
     const [name, link, description, difficulty, userId] = await req.json()
@@ -25,14 +25,16 @@ export async function POST(req: Request) {
             link: link,
             name: name,
             ratings: {
-                "fiveStarCount": 0,
+                "fiveStarCount": 1,
                 "fourStarCount": 0,
                 "threeStarCount": 0,
                 "twoStarCount": 0,
                 "oneStarCount": 0,
             },
             description: description,
-            solvedCount: 0
+            solvedCount: 0,
+            createdAt: Timestamp.fromDate(new Date()),
+            tag: ""
 
         });
 
