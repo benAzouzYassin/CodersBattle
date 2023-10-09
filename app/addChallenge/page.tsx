@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import Select from "./Select";
 import { getCurrentUser } from "@/firbaseService"
 import { useRouter } from "next/navigation";
+import Nav from "@/components/Nav";
 export default function AddChallenge() {
 
 
@@ -42,8 +43,8 @@ export default function AddChallenge() {
     }
 
 
-
-    const userId = getCurrentUser()?.uid
+    const currentUser = getCurrentUser()
+    const userId = currentUser?.uid
     const challengeData = [challengeName, challengeLink, challengeDescription, selectedDiff, userId]
     setIsLoading(true)
     fetch("/api/addChallenge", { method: "POST", body: JSON.stringify(challengeData) })
@@ -68,48 +69,52 @@ export default function AddChallenge() {
   const inputClassName =
     "h-12 rounded-md mt-[2px] placeholder:font-light  pl-2 shadow-sm border-2 border-b-4  border-black focus-within:outline-none focus-within:border-b-[5px] focus-within:border-r-[3px] focus-within:translate-x-[-3px] focus-within:translate-y-[-1px]   transition-transform w-[95%]";
   return (
-    <main className="h-[100vh] w-[100vw] bg-gradient-to-bl  flex from-[#475c71] to-black ">
-      <form
-        action=""
-        className="flex px-10 bg-white flex-col w-1/3 m-auto h-3/4 rounded-xl"
-      >
-        <h1 className="mt-5  drop-shadow-3xl w-[95%] text-center text-2xl font-extrabold">
-          Adding New Challenge !
-        </h1>
-        <label htmlFor="challengeName" className="mt-8 font-medium ">
-          Challenge name
-        </label>
-        <input
-          ref={challengeNameRef}
-          className={inputClassName}
-          type="text"
-          value={challengeName}
-          onChange={(e) => setChallengeName(e.target.value)}
+    <main className="h-[100vh] w-[100vw] bg-gradient-to-bl   from-[#475c71] to-black ">
+      <Nav setIsLoading={setIsLoading} currentUser={getCurrentUser()} selected="Add New Challenge" />
+      <div className="flex mt-28">
 
-          name="challengeName"
-        />
-        <label htmlFor="challengeLink" className="font-medium mt-1">
-          challenge link
-        </label>
-        <input ref={challengeLinkRef} className={inputClassName} value={challengeLink} onChange={(e) => setChallengeLink(e.target.value)} type="text" name="challengeLink" />
-        <label htmlFor="challengeDescription" className="font-medium mt-1">
-          {" "}
-          challenge description
-        </label>
-        <input
-          type="text"
-          className={inputClassName}
-          name="challengeDescription"
-          value={challengeDescription}
-          onChange={(e) => setChallengeDescription(e.target.value)}
-        />
-        <Select updateDiffState={onDifficultySelect} />
-        <button onClick={handleSubmit} className="border-4 flex justify-center items-center hover:bg-black hover:text-white transition-colors duration-150 ease-in border-black h-12 w-[95%] rounded-lg mt-7 text-xl font-black">
-          ADD CHALLENGE
-        </button>
-        {errorMessage && <p className="border-0 border-red-700 drop-shadow-md mt-2 pl-2  text-red-600">{errorMessage}</p>}
-        {isLoading && <p>loading....</p>}
-      </form>
+        <form
+          action=""
+          className="flex px-10 bg-white flex-col w-1/3 m-auto h-3/4 pb-12 rounded-xl"
+        >
+          <h1 className="mt-5  drop-shadow-3xl w-[95%] text-center text-2xl font-extrabold">
+            Adding New Challenge !
+          </h1>
+          <label htmlFor="challengeName" className="mt-8 font-medium ">
+            Challenge name
+          </label>
+          <input
+            ref={challengeNameRef}
+            className={inputClassName}
+            type="text"
+            value={challengeName}
+            onChange={(e) => setChallengeName(e.target.value)}
+
+            name="challengeName"
+          />
+          <label htmlFor="challengeLink" className="font-medium mt-1">
+            challenge link
+          </label>
+          <input ref={challengeLinkRef} className={inputClassName} value={challengeLink} onChange={(e) => setChallengeLink(e.target.value)} type="text" name="challengeLink" />
+          <label htmlFor="challengeDescription" className="font-medium mt-1">
+            {" "}
+            challenge description
+          </label>
+          <input
+            type="text"
+            className={inputClassName}
+            name="challengeDescription"
+            value={challengeDescription}
+            onChange={(e) => setChallengeDescription(e.target.value)}
+          />
+          <Select updateDiffState={onDifficultySelect} />
+          <button onClick={handleSubmit} className="border-4 flex justify-center items-center hover:bg-black hover:text-white transition-colors duration-150 ease-in border-black h-12 w-[95%] rounded-lg mt-7 text-xl font-black">
+            ADD CHALLENGE
+          </button>
+          {errorMessage && <p className="border-0 border-red-700 drop-shadow-md mt-2 pl-2  text-red-600">{errorMessage}</p>}
+          {isLoading && <p>loading....</p>}
+        </form>
+      </div>
     </main>
   );
 }

@@ -5,6 +5,7 @@ import { AppUser, getCurrentUser, getUserData } from "@/firbaseService";
 import { useEffect, useState } from "react";
 import SubmitButton from "./SubmitButton";
 import { useRouter } from "next/navigation";
+import Nav from "@/components/Nav";
 
 type Props = {
   params: { userId: string };
@@ -59,10 +60,13 @@ export default function UpdateUser({ params }: Props) {
   };
 
   return (
-    <main className="flex w-[100vw] h-[100vh] bg-gradient-to-bl from-[#475c71] to-black  ">
+    <main className=" w-[100vw] h-[100vh] bg-gradient-to-bl from-[#475c71] to-black  ">
+      <Nav currentUser={getCurrentUser()} selected="My Account" setIsLoading={setIsLoading} />
+
+
       <form
         onSubmit={handleSubmit}
-        className=" relative bg-white  m-auto py-10  w-[30%]  pr-20  flex flex-col h-[70%]  rounded-2xl shadow-lg  px-20 "
+        className=" mt-20 relative bg-white  m-auto py-10  w-[30%]  pr-20  flex flex-col h-[70%]  rounded-2xl shadow-lg  px-20 "
       >
         <h1 className=" mt-10 text-center absolute top-0 left-[3%] w-[95%] font-bold  text-2xl">
           Update your informations

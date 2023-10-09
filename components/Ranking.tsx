@@ -16,7 +16,7 @@ export default function Ranking() {
     ]
 
 
-    return <div className="w-1/4 bg-[#2f2f35] h-[75vh] mt-20 ml-5 rounded-md ">
+    return <div className="w-1/4 border-2 shadow-2xl h-[75vh] mt-20 ml-5 rounded-md ">
         <h3 className="text-2xl mt-7 font-semibold text-center text-white">Top players !</h3>
         <div className="mt-10 flex flex-col gap-2">
             {topPlayers.map(player => <TopPlayer key={player.id} {...player} />)}

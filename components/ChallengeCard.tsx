@@ -18,7 +18,6 @@ function calculateRating(five: number, four: number, three: number, two: number,
 
 
 export default function ChallengeCard(props: TChallenge) {
-    const [BgColor, setBgColor] = useState("#ffffff")
     const [difficultyColor, setDifficultyColor] = useState("#ffffff")
     const [rating, setRating] = useState(0)
 
@@ -44,28 +43,25 @@ export default function ChallengeCard(props: TChallenge) {
 
         switch (props.difficulty) {
             case "Easy":
-                setBgColor("#2F3136")
                 setDifficultyColor("#16DB7C")
                 break;
             case "Medium":
-                setBgColor("#2F3136")
                 setDifficultyColor("#e9c308")
 
                 break;
             case "Hard":
-                setBgColor("#2F3136")
+
                 setDifficultyColor("#E46464")
                 break;
 
             default:
-                setBgColor("#ffffff")
                 setDifficultyColor("#ffffff")
                 break;
         }
 
     }, [])
     console.log(rating)
-    return <div style={{ backgroundColor: BgColor }} className={`  border-2 flex flex-col hover:cursor-pointer hover:scale-[101%] transition-transform shadow-inner  h-14 w-full  rounded-sm `}>
+    return <div className={` bg-[#222b34]  border-2 flex flex-col hover:cursor-pointer hover:scale-[101%] transition-transform shadow-inner  h-14 w-full  rounded-sm `}>
         <div className="  flex flex-row">
 
             <div className="flex mt-1 ml-1 ">

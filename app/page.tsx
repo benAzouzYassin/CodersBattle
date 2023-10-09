@@ -58,7 +58,7 @@ export default function Home() {
 
 
   return (
-    <main className=" bg-[#282828]">
+    <main className="bg-gradient-to-bl   from-[#475c71] to-black">
       <Toaster
         richColors
         toastOptions={{
@@ -68,12 +68,12 @@ export default function Home() {
       {isLoading && <h1 className="text-4xl">Loading</h1>}
       {currentUser === undefined && <h1>Loading .....</h1>}
       {currentUser && (
-        <Nav currentUser={currentUser} setIsLoading={setIsLoading} />
+        <Nav selected="Challenges" currentUser={currentUser} setIsLoading={setIsLoading} />
       )}
       <div className="w-full gap-10 flex flex-row min-h-[100vh]">
         <Ranking />
         <div className="w-full pl-20 pr-60">
-          <FilterChallenges />
+          <FilterChallenges selected="Most solved" />
           <Challenges challenges={challenges} />
         </div>
 
