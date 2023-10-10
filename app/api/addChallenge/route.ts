@@ -2,8 +2,12 @@
 import { db } from "@/firbaseService"
 import { Timestamp, addDoc, collection, getDocs, query, where } from "firebase/firestore"
 
+
 export async function POST(req: Request) {
     const [name, link, description, difficulty, userId] = await req.json()
+
+
+
     if (!name || !link || !difficulty || !userId) {
         return Response.json({ "message": "One of the fields is empty !", success: false }, { status: 400 })
     }
@@ -23,7 +27,7 @@ export async function POST(req: Request) {
             comments: [],
             difficulty: difficulty,
             link: link,
-            name: name,
+            name: name.split(" ").join("-").toLowerCase(),
             ratings: {
                 "fiveStarCount": 1,
                 "fourStarCount": 0,

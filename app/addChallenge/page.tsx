@@ -75,7 +75,7 @@ export default function AddChallenge() {
 
         <form
           action=""
-          className="flex px-10 bg-white flex-col w-1/3 m-auto h-3/4 pb-12 rounded-xl"
+          className="flex px-10 bg-white flex-col w-[28%] m-auto h-3/4 pb-12 rounded-xl"
         >
           <h1 className="mt-5  drop-shadow-3xl w-[95%] text-center text-2xl font-extrabold">
             Adding New Challenge !

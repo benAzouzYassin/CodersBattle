@@ -6,13 +6,13 @@ export default function Ranking() {
         { name: "Radhi", rank: 1, id: "azezaeea", isFalling: true, solvedCount: 250 },
         { name: "yahya", rank: 2, id: "qds", isFalling: false, solvedCount: 101 },
         { name: "Rayen", rank: 3, id: "dq", isFalling: false, solvedCount: 99 },
-        { name: "Yassine", rank: 4, id: "sqd", isFalling: false, solvedCount: 90 },
-        { name: "Houssem", rank: 5, id: "dq", isFalling: true, solvedCount: 50 },
-        { name: "Ahmed", rank: 6, id: "dq", isFalling: false, solvedCount: 40 },
-        { name: "Aziz", rank: 7, id: "dq", isFalling: true, solvedCount: 20 },
-        { name: "Youssef", rank: 8, id: "dq", isFalling: false, solvedCount: 18 },
-        { name: "Houssem", rank: 9, id: "dq", isFalling: true, solvedCount: 10 },
-        { name: "Monsef", rank: 10, id: "dq", isFalling: true, solvedCount: 7 },
+        { name: "Yassine", rank: 4, id: "sqaezd", isFalling: false, solvedCount: 90 },
+        { name: "Houssem", rank: 5, id: "dqazeaez", isFalling: true, solvedCount: 50 },
+        { name: "Ahmed", rank: 6, id: "aaz", isFalling: false, solvedCount: 40 },
+        { name: "Aziz", rank: 7, id: "dqazes", isFalling: true, solvedCount: 20 },
+        { name: "Youssef", rank: 8, id: "dqsdq", isFalling: false, solvedCount: 18 },
+        { name: "Houssem", rank: 9, id: "dqdsds", isFalling: true, solvedCount: 10 },
+        { name: "Monsef", rank: 10, id: "dxcxq", isFalling: true, solvedCount: 7 },
     ]
 
 

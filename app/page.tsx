@@ -13,12 +13,11 @@ import Ranking from "@/components/Ranking";
 import FilterChallenges from "@/components/Filter";
 
 export default function Home() {
-
+  const [selectedFilter, setSelectedFilter] = useState<"Most solved" | "Latest" | "Top Rated" | "Most difficult">("Most solved")
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null | undefined>();
   const [challenges, setChallenges] = useState<TChallenge[]>([])
-  //TODO implement loading and errors for challenges
   const getChallenges = async () => {
     const challengesRef = collection(db, "challenges")
     try {
@@ -54,7 +53,7 @@ export default function Home() {
     if (currentUser === null) {
       router.replace("/login");
     }
-  }, [currentUser]);
+  }, [currentUser, router]);
 
 
   return (
@@ -73,7 +72,7 @@ export default function Home() {
       <div className="w-full gap-10 flex flex-row min-h-[100vh]">
         <Ranking />
         <div className="w-full pl-20 pr-60">
-          <FilterChallenges selected="Most solved" />
+          <FilterChallenges setChallenges={setChallenges} selected={selectedFilter} setSelected={setSelectedFilter} />
           <Challenges challenges={challenges} />
         </div>
 
