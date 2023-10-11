@@ -10,8 +10,8 @@ import {
   signInWithGoogle,
   singUp,
 } from "@/firbaseService";
-import { User } from "firebase/auth";
-import { Timestamp } from "firebase/firestore";
+import Loading from "@/components/Loading";
+
 const inter = Inter({
   weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
@@ -95,7 +95,7 @@ export default function SignUp() {
   };
   return (
     <>
-      {isLoggedIn === null && <h1>loading ...</h1>}
+      {isLoggedIn === null && <Loading bgColor="#15131d" />}
       {isLoggedIn === false && (
         <main
           style={inter.style}

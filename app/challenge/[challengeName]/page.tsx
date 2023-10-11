@@ -6,6 +6,7 @@ import { db, } from "@/firbaseService"
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { TChallenge } from "@/challengeType";
 import VerificationButton from "./VerificationButton";
+import DaynamicButton from "@/components/DaynamicButton";
 type Props = {
     params: { challengeName: string };
 };
@@ -106,10 +107,15 @@ export default async function ChallengePage({ params }: Props) {
                         {leetcodeDescription}
 
                     </p>
-                    <div className="flex mt-12  justify-center gap-4">   <a target="_blank" href={`https://leetcode.com/problems/${challengeData.name}/`} className=" px-7  border-2 py-[15px] rounded-md text-white hover:border-black bg-black font-bold hover:bg-white  hover:text-black transition-colors duration-200 text-center">Solve Now</a> <VerificationButton challengeName={challengeData.name} /></div>
+                    <div className="flex mt-12  justify-center gap-4">
+
+
+                        <DaynamicButton loading={false} text="Solve Now" link={challengeData.link} className=" px-7  border-2 py-[15px] rounded-md text-white hover:border-black bg-black font-bold hover:bg-white  hover:text-black transition-colors duration-200 text-center" />
+                        <VerificationButton challengeName={challengeData.name} />
+                    </div>
                 </div>
             </div>
-        </main>
+        </main >
 
 
 

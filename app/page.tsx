@@ -11,6 +11,7 @@ import { TChallenge } from "@/challengeType";
 import Challenges from "@/components/Challenges";
 import Ranking from "@/components/Ranking";
 import FilterChallenges from "@/components/Filter";
+import Loading from "@/components/Loading";
 
 export default function Home() {
   const [selectedFilter, setSelectedFilter] = useState<"Most solved" | "Latest" | "Top Rated" | "Most difficult">("Most solved")
@@ -38,6 +39,7 @@ export default function Home() {
       if (user) {
         getUserData(user.uid)
           .then((data) => {
+            setIsLoading(false)
             if (!data?.isVerified)
               toast.error("Please verify your leecode ID ");
           })
@@ -55,7 +57,13 @@ export default function Home() {
     }
   }, [currentUser, router]);
 
-
+  useEffect(() => {
+    if (challenges.length === 0) {
+      setIsLoading(true)
+    } else {
+      setIsLoading(false)
+    }
+  }, [challenges])
   return (
     <main className="bg-gradient-to-bl   from-[#475c71] to-black">
       <Toaster
@@ -64,8 +72,8 @@ export default function Home() {
           style: { fontSize: "medium" },
         }}
       />
-      {isLoading && <h1 className="text-4xl">Loading</h1>}
-      {currentUser === undefined && <h1>Loading .....</h1>}
+      {isLoading && <Loading bgColor="#293541" />}
+      {currentUser === undefined && <Loading bgColor="#293541" />}
       {currentUser && (
         <Nav selected="Challenges" currentUser={currentUser} setIsLoading={setIsLoading} />
       )}

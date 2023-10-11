@@ -3,7 +3,7 @@
 // @ts-ignore
 import { AppUser, getCurrentUser, getUserData } from "@/firbaseService";
 import { useEffect, useState } from "react";
-import SubmitButton from "./SubmitButton";
+import DaynamicButton from "../../../components/DaynamicButton";
 import { useRouter } from "next/navigation";
 import Nav from "@/components/Nav";
 
@@ -126,7 +126,7 @@ export default function UpdateUser({ params }: Props) {
           <span className=" text-red-600 font-semibold">*</span> means a
           required field
         </p>
-        <SubmitButton loading={isLoading} />
+        <DaynamicButton text="Save Updates" loading={isLoading} />
       </form>
     </main>
   );

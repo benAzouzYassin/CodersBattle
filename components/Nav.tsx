@@ -10,13 +10,18 @@ type Props = {
 }
 
 export default function Nav(props: Props) {
+    const triggerLoading = (clickedLink: string) => {
+        if (clickedLink != props.selected) {
+            props.setIsLoading(true)
+        }
+    }
     return <nav className="gap-10 px-10 h-14 font-semibold  flex flex-row  items-center  text-gray-200 border-b-2 ">
         <p className="text-4xl font-bold font-mono  ">Welcome !</p>
 
 
 
         <Link
-            onClick={() => props.setIsLoading(true)}
+            onClick={() => triggerLoading("Challenges")}
             href={`/`}
             className="hover:bg-gray-500 px-2  py-[12px] rounded-sm ml-12"
             style={{ backgroundColor: props.selected === "Challenges" ? "rgb(148 163 184)" : "" }}
@@ -30,7 +35,7 @@ export default function Nav(props: Props) {
 
         <Link
             style={{ backgroundColor: props.selected === "Add New Challenge" ? "rgb(148 163 184)" : "" }}
-            onClick={() => props.setIsLoading(true)}
+            onClick={() => triggerLoading("Add New Challenge")}
             href={`/addChallenge`}
             className="hover:bg-gray-500 px-2 py-[12px] rounded-sm"
         >
@@ -39,7 +44,7 @@ export default function Nav(props: Props) {
 
         <Link
 
-            onClick={() => props.setIsLoading(true)}
+            onClick={() => triggerLoading("Solved challenges")}
             href={`/solvedChallenges/${props.currentUser?.uid}`}
             className="hover:bg-gray-500 px-2 py-[12px] rounded-sm"
             style={{ backgroundColor: props.selected === "Solved challenges" ? "rgb(148 163 184)" : "" }}
@@ -50,7 +55,7 @@ export default function Nav(props: Props) {
 
         <Link
 
-            onClick={() => props.setIsLoading(true)}
+            onClick={() => triggerLoading("My Account")}
             href={`/update/${props.currentUser?.uid}`}
             className="hover:bg-gray-500 px-2 py-[12px] rounded-sm"
             style={{ backgroundColor: props.selected === "My Account" ? "rgb(148 163 184)" : "" }}

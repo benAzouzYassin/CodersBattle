@@ -1,11 +1,25 @@
-"use client";
+"use client"
 
-export default function SubmitButton({ loading }: { loading: boolean }) {
+type Props = {
+  link?: string,
+  loading: boolean,
+  text: string,
+  className?: string
+}
+
+
+export default function DaynamicButton({ className, loading, text, link }: Props) {
+  const styles = className ? className : "bg-black text-xl font-bold text-white w-[95%] rounded-2xl mt-3 h-12 hover:bg-[#313030] hover:scale-[98%] transition-transform"
+  const handleCick = () => {
+    if (link) {
+      window.open(link, "_blank");
+    }
+  }
   return (
     <>
       {!loading ? (
-        <button className="bg-black text-xl font-bold text-white w-[95%] rounded-2xl mt-3 h-12 hover:bg-[#313030] hover:scale-[98%] transition-transform">
-          Save Updates
+        <button onClick={handleCick} className={styles}>
+          {text}
         </button>
       ) : (
         <button
