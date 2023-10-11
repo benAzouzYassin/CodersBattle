@@ -66,7 +66,7 @@ export default function Nav(props: Props) {
 
         <Link onClick={() => props.setIsLoading(true)} href={`/update/${props.currentUser?.uid}`} className="ml-auto flex items-center gap-3">
             <p className="ml-auto justify-self-center font-medium ">{props.currentUser?.email}</p>
-            <img src={props.currentUser?.photoURL ?? null} alt="" className=" w-12 h-12 rounded-full hover:cursor-pointer hover:scale-105 mr-3 shadow-md" />
+            <img src={props.currentUser?.photoURL ?? undefined} alt="" className=" w-12 h-12 rounded-full hover:cursor-pointer hover:scale-105 mr-3 shadow-md" />
         </Link>
     </nav>
 }
