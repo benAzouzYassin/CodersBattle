@@ -78,7 +78,7 @@ export default async function ChallengePage({ params }: Props) {
 
                 <Link
 
-                    href={`/addChallenge`}
+                    href={`/solvedChallenges`}
                     className="hover:bg-zinc-700 px-2 py-[12px] rounded-sm"
 
                 >

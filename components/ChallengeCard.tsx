@@ -1,4 +1,4 @@
-
+"use client"
 import { TChallenge } from "@/challengeType";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

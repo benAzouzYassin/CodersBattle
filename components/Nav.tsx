@@ -40,7 +40,7 @@ export default function Nav(props: Props) {
         <Link
 
             onClick={() => props.setIsLoading(true)}
-            href={`/addChallenge`}
+            href={`/solvedChallenges/${props.currentUser?.uid}`}
             className="hover:bg-gray-500 px-2 py-[12px] rounded-sm"
             style={{ backgroundColor: props.selected === "Solved challenges" ? "rgb(148 163 184)" : "" }}
 
@@ -56,12 +56,12 @@ export default function Nav(props: Props) {
             style={{ backgroundColor: props.selected === "My Account" ? "rgb(148 163 184)" : "" }}
 
         >
-            My Account
+            Update Account
         </Link>
 
         <Link onClick={() => props.setIsLoading(true)} href={`/update/${props.currentUser?.uid}`} className="ml-auto flex items-center gap-3">
             <p className="ml-auto justify-self-center font-medium ">{props.currentUser?.email}</p>
-            <img src={props.currentUser?.photoURL ?? ""} alt="" className=" w-12 h-12 rounded-full hover:cursor-pointer hover:scale-105 mr-3 shadow-md" />
+            <img src={props.currentUser?.photoURL ?? null} alt="" className=" w-12 h-12 rounded-full hover:cursor-pointer hover:scale-105 mr-3 shadow-md" />
         </Link>
     </nav>
 }
