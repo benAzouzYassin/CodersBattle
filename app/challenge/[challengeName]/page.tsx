@@ -120,7 +120,7 @@ export default async function ChallengePage({ params }: Props) {
 
 
     } catch (error) {
-        console.log(error)
+        console.error(error)
         return <p>Server Error ! </p>
     }
 

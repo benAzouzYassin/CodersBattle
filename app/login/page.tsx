@@ -17,8 +17,8 @@ const inter = Inter({
   subsets: ["latin"],
 });
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("example@example.com");
+  const [password, setPassword] = useState("example@example.com");
   const [rememberMe, setRememberMe] = useState(true);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +34,7 @@ export default function Login() {
               saveNewUser(user);
             }
           })
-          .catch(err => console.log(err.message))
+          .catch(err => console.error(err.message))
 
           .finally(() => router.replace("/"));
       } else {

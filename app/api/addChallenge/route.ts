@@ -67,7 +67,7 @@ async function verifyProblem(problemLink: string) {
         return { success: true, message: "problem is valid ! " }
 
     } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
         return { success: false, message: "Server error please try again later . " }
     }
 

@@ -14,7 +14,7 @@ export default async function SolvedChallenges({ params }: { params: { userId: s
     useEffect(() => {
         getUserData(params.userId)
             .then(data => setUser(data))
-            .catch(err => console.log(err))
+            .catch(err => console.error(err))
 
     }, [])
     useEffect(() => {

@@ -53,7 +53,7 @@ export default function UpdateUser({ params }: Props) {
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err.message);
+        console.error(err.message);
         setErrorMessage("server error");
         console.error(err);
       });

@@ -73,7 +73,7 @@ async function verifyUser(user: UserData): Promise<FunctionResponse> {
 
         return { success: true, message: "User was verified successfully !" }
     } catch (error: any) {
-        console.log(error)
+        console.error(error)
         return { success: false, message: "Server error please try again later." }
     }
 }

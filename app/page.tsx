@@ -26,11 +26,10 @@ export default function Home() {
       const challengesData = (await getDocs(challengesRef)).docs.map(d => d.data()) as TChallenge[]
       setChallenges(challengesData)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
-  console.log("reload")
 
 
   useEffect(() => {

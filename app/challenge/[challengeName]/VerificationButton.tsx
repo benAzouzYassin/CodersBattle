@@ -15,7 +15,6 @@ export default function VerificationButton({ challengeName }: { challengeName: s
             .then(data => {
                 setIsLoading(false)
 
-                console.log(data)
                 if (data.success) {
                     toast.success(data.message)
                     setTimeout(() => router.push("/"), 1000)

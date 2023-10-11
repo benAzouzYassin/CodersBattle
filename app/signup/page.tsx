@@ -85,7 +85,7 @@ export default function SignUp() {
     setIsLoading(true);
     signInWithGithub()
       .then((data) => {
-        console.log(data);
+
         setIsLoading(true);
       })
       .catch((err) => {
